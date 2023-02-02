@@ -43,6 +43,7 @@ class _ValueInputScreenMobile extends StatelessWidget {
                         // make a textfield and take input inn every grid in an list of string
                         child: TextField(
                           textAlign: TextAlign.center,
+                          focusNode: viewModel.focusNodeList[index],
                           style: const TextStyle(
                               fontSize: 20, color: Colors.white),
                           decoration: const InputDecoration(
@@ -55,6 +56,10 @@ class _ValueInputScreenMobile extends StatelessWidget {
                                   value.substring(0, 1);
                             } else {
                               viewModel.gridInputs[index] = value;
+                            }
+                            // go to next textfield
+                            if (index + 1 < viewModel.row * viewModel.column) {
+                              viewModel.focusNodeList[index + 1].requestFocus();
                             }
                           },
                         ),

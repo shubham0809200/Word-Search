@@ -14,9 +14,14 @@ class ValueInputScreenViewModel extends BaseViewModel {
 
   List<String> gridInputs = [];
 
+  // focus node list
+  List<FocusNode> focusNodeList = [];
+
   // depending on the row and column, generate the gridInputs list
   void generateGridInputs() {
     gridInputs = List.generate(row * column, (index) => '');
+
+    // generate focus node list
+    focusNodeList = List.generate(row * column, (index) => FocusNode());
   }
-  
 }
