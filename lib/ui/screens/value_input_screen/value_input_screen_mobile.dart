@@ -48,7 +48,14 @@ class _ValueInputScreenMobile extends StatelessWidget {
                           decoration: const InputDecoration(
                               border: OutlineInputBorder()),
                           onChanged: (value) {
-                            viewModel.gridInputs[index] = value;
+                            // if value lenght > 1 then cut to to only one character
+                            if (value.length > 1) {
+                              // substring the value
+                              viewModel.gridInputs[index] =
+                                  value.substring(0, 1);
+                            } else {
+                              viewModel.gridInputs[index] = value;
+                            }
                           },
                         ),
                       )),
