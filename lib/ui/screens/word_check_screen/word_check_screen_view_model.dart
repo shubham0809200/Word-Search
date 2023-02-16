@@ -27,37 +27,83 @@ class WordSearchScreenViewModel extends BaseViewModel {
   }
 
 // Combination search
-  List<int> x = [-1, -1, -1, 0, 0, 1, 1, 1];
-  List<int> y = [-1, 0, 1, -1, 1, -1, 0, 1];
+  // List<int> x = [-1, -1, -1, 0, 0, 1, 1, 1];
+  // List<int> y = [-1, 0, 1, -1, 1, -1, 0, 1];
   List<List<int>> positions = [];
   List<int> position = [];
+
+  // bool search2D(List<List<String>> grid, int row, int col, String word) {
+  //   if (grid[row][col] != word[0]) return false;
+
+  //   int len = word.length;
+
+  //   for (int dir = 0; dir < 8; dir++) {
+  //     int k, rd = row + x[dir], cd = col + y[dir];
+
+  //     for (k = 1; k < len; k++) {
+  //       if (rd >= rows || rd < 0 || cd >= columns || cd < 0) break;
+
+  //       if (grid[rd][cd] != word[k]) {
+  //         positions = [];
+  //         break;
+  //       }
+  //       positions.add([rd, cd]);
+  //       rd += x[dir];
+  //       cd += y[dir];
+  //     }
+
+  //     if (k == len) {
+  //       positions.add([row, col]);
+  //       return true;
+  //     }
+  //     continue;
+  //   }
+  //   return false;
+  // }
 
   bool search2D(List<List<String>> grid, int row, int col, String word) {
     if (grid[row][col] != word[0]) return false;
 
     int len = word.length;
 
-    for (int dir = 0; dir < 8; dir++) {
-      int k, rd = row + x[dir], cd = col + y[dir];
+    // search from left to right
+    if (col + len <= grid[row].length &&
+        grid[row].sublist(col, col + len).join('') == word) {
+      positions = [];
+      for (int i = col; i < col + len; i++) {
+        positions.add([row, i]);
+      }
+      return true;
+    }
 
-      for (k = 1; k < len; k++) {
-        if (rd >= rows || rd < 0 || cd >= columns || cd < 0) break;
-
-        if (grid[rd][cd] != word[k]) {
-          positions = [];
+    // search from top to bottom
+    if (row + len <= grid.length) {
+      bool found = true;
+      positions = [];
+      for (int i = row; i < row + len; i++) {
+        if (grid[i][col] != word[i - row]) {
+          found = false;
           break;
         }
-        positions.add([rd, cd]);
-        rd += x[dir];
-        cd += y[dir];
+        positions.add([i, col]);
       }
-
-      if (k == len) {
-        positions.add([row, col]);
-        return true;
-      }
-      continue;
+      if (found) return true;
     }
+
+    // search diagonally from top-left to bottom-right
+    if (row + len <= grid.length && col + len <= grid[row].length) {
+      bool found = true;
+      positions = [];
+      for (int i = 0; i < len; i++) {
+        if (grid[row + i][col + i] != word[i]) {
+          found = false;
+          break;
+        }
+        positions.add([row + i, col + i]);
+      }
+      if (found) return true;
+    }
+
     return false;
   }
 
@@ -100,7 +146,7 @@ class WordSearchScreenViewModel extends BaseViewModel {
           backgroundColor: Colors.red,
           textColor: Colors.white,
           fontSize: 16.0);
-      wordToCheck = ''; 
+      wordToCheck = '';
       position.clear();
     }
     flag = false;
